@@ -49,7 +49,6 @@ public class fieldController {
             location = new Point2D(random(CANVAS_SIZE/2, CANVAS_SIZE), random((2*CANVAS_SIZE)/3, CANVAS_SIZE));
             createSoldier(location, "F", 5, 10, 10, 100);
         }
-        Math.random();
         paint();
     }
     public void createSoldier(Point2D location, String name, int team, int damage, int range, int health) {
