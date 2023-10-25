@@ -8,6 +8,7 @@
 
 
 import javafx.geometry.Point2D;
+import javafx.scene.shape.Circle;
 
 /**
  * Course SWE2410-121
@@ -20,6 +21,13 @@ import javafx.geometry.Point2D;
 public class Soldier {
     private Point2D location;
     public SoldierType type;
+    public Soldier(Point2D location, SoldierType type){
+        this.location = location;
+        this.type = type;
+    }
+    public void draw(Circle circle){
+        type.draw(circle, location);
+    }
 
 }
 

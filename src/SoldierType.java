@@ -6,7 +6,10 @@
  * Created 10/25/2023
  */
 
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 
 /**
  * Course SWE2410-121
@@ -30,5 +33,20 @@ public class SoldierType {
         this.health = health;
     }
 
+    public void draw(Circle circle, Point2D location) {
+        circle.setCenterX(location.getX());
+        circle.setCenterY(location.getY());
+        Paint color;
+        switch (team) {
+            case 0 -> color = Color.RED;
+            case 1 -> color = Color.BLUE;
+            case 2 -> color = Color.YELLOW;
+            case 3 -> color = Color.GREEN;
+            case 4 -> color = Color.VIOLET;
+            case 5 -> color = Color.ORANGE;
+            default -> color = null;
+        }
+        circle.setFill(color);
+    }
 }
 
