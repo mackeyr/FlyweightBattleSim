@@ -6,6 +6,8 @@
  * Created 10/25/2023
  */
 
+import javafx.geometry.Point2D;
+
 import java.util.List;
 
 /**
@@ -18,7 +20,10 @@ import java.util.List;
  */
 public class Battlefield {
     public List<Soldier> soldiers;
-    public Soldier createSoldier;
+
+    public Soldier createSoldier(Point2D location, String name, int team, int damage, int range, int health) {
+        return null;
+    }
 
 }
 
