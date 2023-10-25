@@ -6,10 +6,13 @@
  * Created 10/25/2023
  */
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ import java.util.List;
  */
 public class fieldController {
     private final static double NUM_SOLDIERS = 1000000;
-    private final static double NUM_TEAMS = 2;
+    private final static double NUM_TEAMS = 6;
     private final static int CANVAS_SIZE = 500;
     public List<Soldier> soldiers = new ArrayList<>();
     public Pane field;
@@ -33,10 +36,18 @@ public class fieldController {
     public void initialize() {
         field.setStyle("-fx-background-color: linear-gradient(to bottom right, derive(forestgreen, 20%), derive(forestgreen, -40%));");
         for (int i = 0; i < Math.floor(NUM_SOLDIERS/NUM_TEAMS); i++){
-            Point2D location = new Point2D(random(0, CANVAS_SIZE), random(0, CANVAS_SIZE));
-            createSoldier(location, "RED", 0, 10, 10, 100);
-            location = new Point2D(random(0, CANVAS_SIZE), random(0, CANVAS_SIZE));
-            createSoldier(location, "BLUE", 1, 10, 10, 100);
+            Point2D location = new Point2D(random(0, CANVAS_SIZE/2), random(0, CANVAS_SIZE/3));
+            createSoldier(location, "A", 0, 10, 10, 100);
+            location = new Point2D(random(0, CANVAS_SIZE/2), random(CANVAS_SIZE/3, (2*CANVAS_SIZE)/3));
+            createSoldier(location, "B", 1, 10, 10, 100);
+            location = new Point2D(random(0, CANVAS_SIZE/2), random((2*CANVAS_SIZE)/3, CANVAS_SIZE));
+            createSoldier(location, "C", 2, 10, 10, 100);
+            location = new Point2D(random(CANVAS_SIZE/2, CANVAS_SIZE), random(0, CANVAS_SIZE/3));
+            createSoldier(location, "D", 3, 10, 10, 100);
+            location = new Point2D(random(CANVAS_SIZE/2, CANVAS_SIZE), random(CANVAS_SIZE/3, (2*CANVAS_SIZE)/3));
+            createSoldier(location, "E", 4, 10, 10, 100);
+            location = new Point2D(random(CANVAS_SIZE/2, CANVAS_SIZE), random((2*CANVAS_SIZE)/3, CANVAS_SIZE));
+            createSoldier(location, "F", 5, 10, 10, 100);
         }
         Math.random();
         paint();
