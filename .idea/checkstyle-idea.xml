@@ -3,16 +3,13 @@
   <component name="CheckStyle-IDEA" serialisationVersion="2">
     <checkstyleVersion>10.3.4</checkstyleVersion>
     <scanScope>JavaOnly</scanScope>
-    <suppressErrors>true</suppressErrors>
     <copyLibs>true</copyLibs>
-    <option name="activeLocationIds">
-      <option value="297803a7-4f8c-4fdc-88bb-1dc9492844f0" />
-    </option>
+    <option name="thirdPartyClasspath" />
+    <option name="activeLocationIds" />
     <option name="locations">
       <list>
         <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
-        <ConfigurationLocation id="297803a7-4f8c-4fdc-88bb-1dc9492844f0" type="HTTP_URL" scope="All" description="MSOE">https://faculty-web.msoe.edu/jones/MSOE_checkStyle.xml</ConfigurationLocation>
       </list>
     </option>
   </component>

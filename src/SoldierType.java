@@ -48,5 +48,16 @@ public class SoldierType {
         }
         circle.setFill(color);
     }
+
+    public int getTeam() {
+        return team;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public void attack(Soldier target) {
+    }
 }
 
