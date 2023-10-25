@@ -20,6 +20,7 @@ import javafx.scene.shape.Circle;
  */
 public class Soldier {
     private Point2D location;
+    public Circle circle;
     private static int speed = 10;
     public SoldierType type;
     public Soldier(Point2D location, SoldierType type){
@@ -27,7 +28,7 @@ public class Soldier {
         this.type = type;
     }
     public void draw(Circle circle){
-        type.draw(circle, location);
+        this.circle = type.draw(circle, location);
     }
 
     public void move() {
@@ -52,6 +53,8 @@ public class Soldier {
                 }
             }
         }
+        circle.setCenterX(location.getX());
+        circle.setCenterY(location.getY());
     }
 
     public int getTeam() {

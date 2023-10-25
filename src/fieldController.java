@@ -29,9 +29,9 @@ import java.util.List;
  * @version created on 10/25/2023 at 1:32 PM
  */
 public class fieldController {
-    private final static double NUM_SOLDIERS = 60;
+    private final static double NUM_SOLDIERS = 10000;
     private final static double NUM_TEAMS = 6;
-    private final static int CANVAS_SIZE = 800;
+    private final static int CANVAS_SIZE = 600;
     public static List<Soldier> soldiers = new ArrayList<>();
 
     @FXML
@@ -72,7 +72,7 @@ public class fieldController {
         field.getChildren().clear();
         for (Soldier solder : soldiers) {
             Circle circle = new Circle();
-            circle.setRadius(1);
+            circle.setRadius(5);
             solder.draw(circle);
             field.getChildren().add(circle);
         }
@@ -80,7 +80,6 @@ public class fieldController {
     public void onMouseClicked(MouseEvent mouseEvent) {
         for (Soldier soldier: soldiers) {
             soldier.move();
-            paint();
         }
     }
 }

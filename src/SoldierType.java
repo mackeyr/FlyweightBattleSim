@@ -33,7 +33,7 @@ public class SoldierType {
         this.health = health;
     }
 
-    public void draw(Circle circle, Point2D location) {
+    public Circle draw(Circle circle, Point2D location) {
         circle.setCenterX(location.getX());
         circle.setCenterY(location.getY());
         Paint color;
@@ -47,6 +47,7 @@ public class SoldierType {
             default -> color = null;
         }
         circle.setFill(color);
+        return circle;
     }
 
     public int getTeam() {
