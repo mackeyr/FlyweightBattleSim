@@ -41,9 +41,9 @@ public class SoldierType {
             case 0 -> color = Color.RED;
             case 1 -> color = Color.BLUE;
             case 2 -> color = Color.YELLOW;
-            case 3 -> color = Color.GREEN;
-            case 4 -> color = Color.VIOLET;
-            case 5 -> color = Color.ORANGE;
+            case 3 -> color = Color.CYAN;
+            case 4 -> color = Color.MAGENTA;
+            case 5 -> color = Color.BLACK;
             default -> color = null;
         }
         circle.setFill(color);

@@ -26,7 +26,7 @@ import java.util.List;
  * @version created on 10/25/2023 at 1:32 PM
  */
 public class fieldController {
-    private final static double NUM_SOLDIERS = 1000000;
+    private final static double NUM_SOLDIERS = 60000;
     private final static double NUM_TEAMS = 6;
     private final static int CANVAS_SIZE = 500;
     public List<Soldier> soldiers = new ArrayList<>();
