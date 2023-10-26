@@ -12,6 +12,7 @@ public class Main extends Application {
         stage.setTitle("Flyweight Battle Sim");
         stage.setScene(new Scene(root));
         stage.show();
+        root.requestFocus();
     }
 
 

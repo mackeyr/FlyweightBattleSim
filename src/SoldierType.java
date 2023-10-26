@@ -25,7 +25,8 @@ public class SoldierType {
     private int damage;
     private int range;
     private int health;
-    public SoldierType(String name, int team, int damage, int range, int health){
+
+    public SoldierType(String name, int team, int damage, int range, int health) {
         this.name = name;
         this.team = team;
         this.damage = damage;
@@ -58,7 +59,12 @@ public class SoldierType {
         return range;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
     public void attack(Soldier target) {
+        target.takeDamage(damage);
     }
 }
 

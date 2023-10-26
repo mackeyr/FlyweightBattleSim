@@ -23,9 +23,13 @@ public class Soldier {
     public Circle circle;
     private static int speed = 10;
     public SoldierType type;
+    private int health;
+    public boolean isDead = false;
+
     public Soldier(Point2D location, SoldierType type){
         this.location = location;
         this.type = type;
+        health = type.getHealth();
     }
     public void draw(Circle circle){
         this.circle = type.draw(circle, location);
@@ -33,7 +37,7 @@ public class Soldier {
 
     public void move() {
         Soldier target = null;
-        for (Soldier soldier : fieldController.soldiers) {
+        for (Soldier soldier : FieldController.soldiers) {
             if (soldier.getTeam() != getTeam()) {
                 if (target == null || target.getLocation().distance(location) >
                         soldier.getLocation().distance(location)) {
@@ -63,6 +67,13 @@ public class Soldier {
 
     public Point2D getLocation() {
         return location;
+    }
+
+    public void takeDamage(int damage) {
+        health -= damage;
+        if (health <= 0) {
+            isDead = true;
+        }
     }
 }
 
