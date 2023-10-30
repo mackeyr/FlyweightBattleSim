@@ -25,6 +25,13 @@ public class SoldierType {
     private int damage;
     private int range;
     private int health;
+    private Paint color;
+    private static Point2D[] teamLocations = {new Point2D(FieldController.CANVAS_SIZE / 4, FieldController.CANVAS_SIZE / 12),
+            new Point2D(FieldController.CANVAS_SIZE / 8, FieldController.CANVAS_SIZE / 2),
+            new Point2D(FieldController.CANVAS_SIZE / 4, 11 * FieldController.CANVAS_SIZE / 12),
+            new Point2D(3 * FieldController.CANVAS_SIZE / 4, FieldController.CANVAS_SIZE / 12),
+            new Point2D(7 * FieldController.CANVAS_SIZE / 8, FieldController.CANVAS_SIZE / 2),
+            new Point2D(3 * FieldController.CANVAS_SIZE / 4, 11 * FieldController.CANVAS_SIZE / 12)};
 
     public SoldierType(String name, int team, int damage, int range, int health) {
         this.name = name;
@@ -32,12 +39,6 @@ public class SoldierType {
         this.damage = damage;
         this.range = range;
         this.health = health;
-    }
-
-    public Circle draw(Circle circle, Point2D location) {
-        circle.setCenterX(location.getX());
-        circle.setCenterY(location.getY());
-        Paint color;
         switch (team) {
             case 0 -> color = Color.RED;
             case 1 -> color = Color.BLUE;
@@ -47,6 +48,11 @@ public class SoldierType {
             case 5 -> color = Color.BLACK;
             default -> color = null;
         }
+    }
+
+    public Circle draw(Circle circle, Point2D location) {
+        circle.setCenterX(location.getX());
+        circle.setCenterY(location.getY());
         circle.setFill(color);
         return circle;
     }
@@ -65,6 +71,10 @@ public class SoldierType {
 
     public void attack(Soldier target) {
         target.takeDamage(damage);
+    }
+
+    public Point2D[] getTeamLocations() {
+        return teamLocations;
     }
 }
 

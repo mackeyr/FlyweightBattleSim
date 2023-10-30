@@ -9,7 +9,6 @@
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
@@ -27,7 +26,7 @@ import java.util.List;
 public class FieldController {
     private final static double NUM_SOLDIERS = 10000;
     private final static double NUM_TEAMS = 6;
-    private final static int CANVAS_SIZE = 600;
+    public final static double CANVAS_SIZE = 600;
     public static List<Soldier> soldiers = new ArrayList<>();
 
     @FXML
@@ -38,31 +37,23 @@ public class FieldController {
         field.setStyle("-fx-background-color: linear-gradient(to bottom right, derive(white, 20%), derive(black, -40%));");
         field.setFocusTraversable(true);
         for (int i = 0; i < Math.floor(NUM_SOLDIERS/NUM_TEAMS); i++){
-            Point2D location = new Point2D(random(0, CANVAS_SIZE / 4), random(0, CANVAS_SIZE / 6));
-            createSoldier(location, "A", 0, 10, 35, 100);
-            location = new Point2D(random(0, CANVAS_SIZE / 4), random(5 * CANVAS_SIZE / 12, 7 * CANVAS_SIZE / 12));
-            createSoldier(location, "B", 1, 10, 10, 100);
-            location = new Point2D(random(0, CANVAS_SIZE / 4), random(5 * CANVAS_SIZE / 6, CANVAS_SIZE));
-            createSoldier(location, "C", 2, 10, 10, 100);
-            location = new Point2D(random(3 * CANVAS_SIZE / 4, CANVAS_SIZE), random(0, CANVAS_SIZE / 6));
-            createSoldier(location, "D", 3, 10, 20, 100);
-            location = new Point2D(random(3 * CANVAS_SIZE / 4, CANVAS_SIZE), random(5 * CANVAS_SIZE / 12, 7 * CANVAS_SIZE / 12));
-            createSoldier(location, "E", 4, 10, 10, 100);
-            location = new Point2D(random(3 * CANVAS_SIZE / 4, CANVAS_SIZE), random(5 * CANVAS_SIZE / 6, CANVAS_SIZE));
-            createSoldier(location, "F", 5, 10, 10, 100);
+            createSoldier("A", 0, 10, 500, 10);
+            createSoldier("B", 1, 10, 10, 10);
+            createSoldier("C", 2, 10, 10, 10);
+            createSoldier("D", 3, 10, 20, 10);
+            createSoldier("E", 4, 10, 10, 10);
+            createSoldier("F", 5, 10, 10, 10);
         }
         paint();
     }
 
-    public void createSoldier(Point2D location, String name, int team, int damage, int range, int health) {
+    public void createSoldier(String name, int team, int damage, int range, int health) {
         SoldierType type = SoldierFactory.getSoldierType(name, team, damage, range, health);
-        Soldier soldier = new Soldier(location, type);
+        Soldier soldier = new Soldier(type);
         soldiers.add(soldier);
     }
 
-    private static double random(int min, int max) {
-        return min + (Math.random() * ((max - min) + 1));
-    }
+
 
     public void paint(){
         field.getChildren().clear();
@@ -86,5 +77,6 @@ public class FieldController {
         }
         soldiers.removeAll(toRemove);
     }
+
 }
 

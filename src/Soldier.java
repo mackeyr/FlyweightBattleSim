@@ -26,10 +26,13 @@ public class Soldier {
     private int health;
     public boolean isDead = false;
 
-    public Soldier(Point2D location, SoldierType type){
-        this.location = location;
+    public Soldier(SoldierType type){
         this.type = type;
         health = type.getHealth();
+
+        double theta = random(0, 360);
+        double r = random(0, 100);
+        location = type.getTeamLocations()[type.getTeam()].add(r * Math.cos(theta), r * Math.sin(theta));
     }
     public void draw(Circle circle){
         this.circle = type.draw(circle, location);
@@ -75,5 +78,10 @@ public class Soldier {
             isDead = true;
         }
     }
+
+    private static double random(int min, int max) {
+        return min + (Math.random() * ((max - min) + 1));
+    }
 }
+
 
