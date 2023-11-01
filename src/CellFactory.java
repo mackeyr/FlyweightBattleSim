@@ -6,6 +6,8 @@
  * Created 10/25/2023
  */
 
+import javafx.scene.image.Image;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,13 +19,13 @@ import java.util.Map;
  * @author schreibert
  * @version created on 10/25/2023 at 11:58 AM
  */
-public class SoldierFactory {
-    private static Map<String, SoldierType> soldierTypes = new HashMap<>();
-    public static SoldierType getSoldierType(String name, int team, int damage, int range, int health) {
-        SoldierType result = soldierTypes.get(name);
+public class CellFactory {
+    private static Map<String, CellType> cellTypes = new HashMap<>();
+    public static CellType getCellType(String name, Image image, double size) {
+        CellType result = cellTypes.get(name);
         if (result == null) {
-            result = new SoldierType(name, team, damage, range, health);
-            soldierTypes.put(name, result);
+            result = new CellType(name, image, size);
+            cellTypes.put(name, result);
         }
         return result;
     }
