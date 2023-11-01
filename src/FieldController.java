@@ -11,8 +11,6 @@ import javafx.scene.control.Cell;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +23,8 @@ import java.util.List;
  * @author schreibert
  * @version created on 10/25/2023 at 1:32 PM
  */
-public class FieldController {;
-    public static List<Soldier> cells = new ArrayList<>();
+public class FieldController {
+    public static List<Cell> cells = new ArrayList<>();
 
     @FXML
     public Pane field;
@@ -42,7 +40,7 @@ public class FieldController {;
         Cell cell = new Cell(type);
         cells.add(cell);
     }
-    
+
 
     @FXML
     public void onKeyPressed(KeyEvent keyEvent) {

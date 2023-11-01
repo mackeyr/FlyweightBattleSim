@@ -9,7 +9,6 @@
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Circle;
 
 /**
  * Course SWE2410-121
@@ -19,16 +18,16 @@ import javafx.scene.shape.Circle;
  * @author schreibert
  * @version created on 10/25/2023 at 11:35 AM
  */
-public class Cell {
+public class Cell{
     private Point2D location;
     public Image image;
-    private static int size;
-    public SoldierType type;
+    private static double size;
+    public CellType type;
 
-    public Cell(SoldierType type){
+    public Cell(CellType type){
         this.type = type;
-        size = type.getSize;
-        image = type.getImage;
+        size = type.getSize();
+        image = type.getImage();
         location = new Point2D(0,0);
     }
     public void split(){

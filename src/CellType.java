@@ -29,6 +29,12 @@ public class CellType {
         this.size = size;
     }
 
+    public double getSize() {
+        return size;
+    }
 
+    public Image getImage() {
+        return image;
+    }
 }
 
