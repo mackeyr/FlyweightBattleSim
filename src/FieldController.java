@@ -32,11 +32,14 @@ public class FieldController {
 
     @FXML
     public void initialize() {
-        field.setStyle("-fx-background-color: linear-gradient(to bottom right, derive(white, 20%), derive(black, -40%));");
         field.setFocusTraversable(true);
 
-        createCell("new", new Image("file:cell.png"), 20, new Point2D(300, 300));
-        createCell("cell2", new Image("file:cell2.png"), 30, new Point2D(200, 200));
+        createCell("cell1", new Image("file:cell1.png"), 10, new Point2D(300, 300));
+        createCell("cell2", new Image("file:cell2.png"), 8, new Point2D(200, 200));
+        createCell("cell3", new Image("file:cell3.png"), 12, new Point2D(400, 400));
+        createCell("cell4", new Image("file:cell4.png"), 14, new Point2D(200, 400));
+        createCell("cell5", new Image("file:cell5.png"), 6, new Point2D(400, 200));
+
         draw();
     }
 
@@ -63,7 +66,6 @@ public class FieldController {
             cells.get(i).split();
         }
         draw();
-        System.out.println(cells.size());
     }
 }
 
