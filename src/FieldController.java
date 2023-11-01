@@ -36,6 +36,7 @@ public class FieldController {
         field.setFocusTraversable(true);
 
         createCell("new", new Image("file:cell.png"), 20, new Point2D(300, 300));
+        createCell("cell2", new Image("file:cell2.png"), 30, new Point2D(200, 200));
         draw();
     }
 
