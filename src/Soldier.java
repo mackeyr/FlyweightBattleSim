@@ -25,13 +25,14 @@ public class Soldier {
     public SoldierType type;
     private int health;
     public boolean isDead = false;
+    private Soldier target;
 
     public Soldier(SoldierType type){
         this.type = type;
         health = type.getHealth();
 
         double theta = random(0, 360);
-        double r = random(0, 100);
+        double r = random(0, 50);
         location = type.getTeamLocations()[type.getTeam()].add(r * Math.cos(theta), r * Math.sin(theta));
     }
     public void draw(Circle circle){
@@ -39,15 +40,10 @@ public class Soldier {
     }
 
     public void move() {
-        Soldier target = null;
-        for (Soldier soldier : FieldController.soldiers) {
-            if (soldier.getTeam() != getTeam()) {
-                if (target == null || target.getLocation().distance(location) >
-                        soldier.getLocation().distance(location)) {
-                    target = soldier;
-                }
-            }
+        if (target == null || target.isDead) {
+            target = chooseTarget();
         }
+
         if (target != null) {
             if (target.getLocation().distance(location) < type.getRange()) {
                 type.attack(target);
@@ -81,6 +77,19 @@ public class Soldier {
 
     private static double random(int min, int max) {
         return min + (Math.random() * ((max - min) + 1));
+    }
+
+    public Soldier chooseTarget() {
+        Soldier target = null;
+        for (Soldier soldier : FieldController.soldiers) {
+            if (soldier.getTeam() != getTeam()) {
+                if (target == null || target.getLocation().distance(location) >
+                        soldier.getLocation().distance(location)) {
+                    target = soldier;
+                }
+            }
+        }
+        return target;
     }
 }
 
