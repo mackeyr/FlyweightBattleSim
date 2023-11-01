@@ -8,8 +8,7 @@
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.image.ImageView;
 
 /**
  * Course SWE2410-121
@@ -35,6 +34,14 @@ public class CellType {
 
     public Image getImage() {
         return image;
+    }
+
+    public void split(Cell cell) {
+        int splits = cell.incrementSplits();
+        Point2D change = new Point2D(splits % 2 == 0 ? size : 0, splits % 2 == 0 ? 0 : size).multiply(Math.sqrt(1 + splits));
+        Cell newCell = new Cell(this, cell.getLocation().subtract(change), splits);
+        cell.setLocation(cell.getLocation().add(change));
+        FieldController.cells.add(newCell);
     }
 }
 

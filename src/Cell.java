@@ -9,6 +9,7 @@
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Course SWE2410-121
@@ -18,24 +19,50 @@ import javafx.scene.image.Image;
  * @author schreibert
  * @version created on 10/25/2023 at 11:35 AM
  */
-public class Cell{
+public class Cell {
     private Point2D location;
-    public Image image;
-    private static double size;
-    public CellType type;
+    private Image image;
+    private ImageView imageView;
+    private CellType type;
+    private int splits;
 
-    public Cell(CellType type){
+    public Cell(CellType type, Point2D location){
         this.type = type;
-        size = type.getSize();
         image = type.getImage();
-        location = new Point2D(0,0);
+        imageView = new ImageView(image);
+        this.location = location;
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(getSize());
+        setLocation(location);
     }
-    public void split(){
-        Cell sisterCell = new Cell(type);
-        sisterCell.setLocation(location);
+
+    public Cell(CellType type, Point2D location, int splits) {
+        this(type, location);
+        this.splits = ++splits;
+    }
+    public void split() {
+        type.split(this);
     }
     public void setLocation(Point2D location){
         this.location = location;
+        imageView.setLayoutX(location.getX());
+        imageView.setLayoutY(location.getY());
+    }
+
+    public Point2D getLocation() {
+        return location;
+    }
+
+    public double getSize() {
+        return type.getSize();
+    }
+
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    public int incrementSplits() {
+        return splits++;
     }
 }
 
