@@ -7,7 +7,6 @@
  */
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Cell;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
