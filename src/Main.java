@@ -3,6 +3,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -28,7 +29,8 @@ public class Main extends Application {
     private static final int NUM_BALLS = 2;
     private static final int GRID_SIZE = 5;
     private static final int MAX_VELOCITY = 20;
-
+    private int generation;
+    private Image image = new Image("Table_tennis_ball.png");
     private List<Ball> balls = new ArrayList<>();
     private boolean dragging = false;
     private Ball draggedBall = null;
@@ -57,7 +59,7 @@ public class Main extends Application {
         primaryStage.show();
 
         for (int i = 0; i < NUM_BALLS; i++) {
-            balls.add(new Ball(WIDTH / 2, HEIGHT / 2, 10, 10, BALL_RADIUS));
+            balls.add(createBall(WIDTH / 2, HEIGHT / 2, 10, 10, "father", image, BALL_RADIUS));
         }
 
         ExecutorService executor = Executors.newFixedThreadPool(NUM_BALLS);
@@ -90,7 +92,7 @@ public class Main extends Application {
         double dx = ball.getX() - mouseX;
         double dy = ball.getY() - mouseY;
         double distance = Math.sqrt(dx * dx + dy * dy);
-        return distance < ball.getRadius();
+        return distance < ball.getType().getRadius();
     }
 
 
@@ -163,21 +165,21 @@ public class Main extends Application {
     }
 
     private void handleSideCollisions(Ball ball) {
-        if (ball.getX() < ball.getRadius()) {
+        if (ball.getX() < ball.getType().getRadius()) {
             ball.setVelocityX(-ball.getVelocityX()/2);
-            ball.setX(ball.getRadius());
+            ball.setX(ball.getType().getRadius());
         }
-        if (ball.getX() > WIDTH - ball.getRadius()){
+        if (ball.getX() > WIDTH - ball.getType().getRadius()){
             ball.setVelocityX(-ball.getVelocityX()/2);
-            ball.setX(WIDTH - (ball.getRadius()));
+            ball.setX(WIDTH - (ball.getType().getRadius()));
         }
-        if (ball.getY() < ball.getRadius()) {
+        if (ball.getY() < ball.getType().getRadius()) {
             ball.setVelocityY(-ball.getVelocityY()/2);
-            ball.setY(ball.getRadius());
+            ball.setY(ball.getType().getRadius());
         }
-        if (ball.getY() > HEIGHT - ball.getRadius()){
+        if (ball.getY() > HEIGHT - ball.getType().getRadius()){
             ball.setVelocityY(-ball.getVelocityY()/2);
-            ball.setY(HEIGHT - (ball.getRadius()));
+            ball.setY(HEIGHT - (ball.getType().getRadius()));
         }
     }
 
@@ -210,7 +212,7 @@ public class Main extends Application {
         double dx = ball1.getX() - ball2.getX();
         double dy = ball1.getY() - ball2.getY();
         double distance = Math.sqrt(dx * dx + dy * dy);
-        return distance < ball1.getRadius() + ball2.getRadius();
+        return distance < ball1.getType().getRadius() + ball2.getType().getRadius();
     }
 
     private void resolveCollision(Ball ball1, Ball ball2) {
@@ -265,18 +267,36 @@ public class Main extends Application {
         pane.getChildren().clear(); // Clear the previous balls
 
         for (Ball ball : balls) {
-            ImageView ballImage = ball.getBallImage();
-            ballImage.setLayoutX(ball.getX() - ball.getRadius());
-            ballImage.setLayoutY(ball.getY() - ball.getRadius());
+            ImageView ballImage = new ImageView(ball.getType().getBallImage());
+            ballImage.setFitWidth(2 * ball.getType().getRadius());
+            ballImage.setFitHeight(2 * ball.getType().getRadius());
+            ballImage.setLayoutX(ball.getX() - ball.getType().getRadius());
+            ballImage.setLayoutY(ball.getY() - ball.getType().getRadius());
             pane.getChildren().add(ballImage);
         }
     }
+    private Ball createBall(double x, double y, double velocityX, double velocityY, String name, Image image, double radius){
+        BallType type = BallFactory.getBallType(name, image, radius);
+        Ball ball = new Ball(x, y, velocityX, velocityY, type);
+        return ball;
+    }
+    private List<Ball> split(Ball ball) {
+        List<Ball> balls = new ArrayList<>();
+        double radius = ball.getType().getRadius() * 0.7;
+        String name = "gen: " + generation;
+        Ball newBall1 = createBall(ball.getX() - radius, ball.getY(), -ball.getVelocityX(), ball.getVelocityY(), name, image, radius);
+        Ball newBall2 = createBall(ball.getX() + radius, ball.getY(), -ball.getVelocityX(), ball.getVelocityY(), name, image, radius);
+        balls.add(newBall1);
+        balls.add(newBall2);
+        return balls;
+    }
     private void split() {
+        ++generation;
         ExecutorService executor = Executors.newFixedThreadPool(balls.size());
         List<Future<List<Ball>>> splitFutures = new ArrayList();
 
         for (Ball ball : balls) {
-            Future<List<Ball>> future = executor.submit(() -> ball.split());
+            Future<List<Ball>> future = executor.submit(() -> split(ball));
             splitFutures.add(future);
         }
 

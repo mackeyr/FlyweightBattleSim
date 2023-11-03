@@ -24,32 +24,14 @@ class Ball {
     private double y;
     private double velocityX;
     private double velocityY;
-    private double radius;
-    private ImageView ballImage;
+    private BallType type;
 
-    public Ball(double x, double y, double velocityX, double velocityY, double radius) {
+    public Ball(double x, double y, double velocityX, double velocityY, BallType type) {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
         this.velocityY = velocityY;
-        this.radius = radius;
-        Image image = new Image("Table_tennis_ball.png");
-        ballImage = new ImageView(image);
-        ballImage.setFitWidth(2 * radius);
-        ballImage.setFitHeight(2 * radius);
-
-        // Set the initial position of the ImageView
-        ballImage.setLayoutX(x - radius);
-        ballImage.setLayoutY(y - radius);
-    }
-    public List<Ball> split() {
-        List<Ball> balls = new ArrayList<>();
-        double radius = getRadius() * 0.7;
-        Ball newBall1 = new Ball(getX() - radius, getY(), -getVelocityX(), getVelocityY(), radius);
-        Ball newBall2 = new Ball(getX() + radius, getY(), getVelocityX(), getVelocityY(), radius);
-        balls.add(newBall1);
-        balls.add(newBall2);
-        return balls;
+        this.type = type;
     }
     public double getX() {
         return x;
@@ -82,13 +64,8 @@ class Ball {
     public void setVelocityY(double velocityY) {
         this.velocityY = velocityY;
     }
-
-    public double getRadius() {
-        return radius;
-    }
-
-    public ImageView getBallImage() {
-        return ballImage;
+    public BallType getType() {
+        return type;
     }
 }
 
