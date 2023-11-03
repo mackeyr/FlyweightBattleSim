@@ -11,7 +11,7 @@ import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BallGravityCollisionApp extends Application {
+public class Main extends Application {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final double BALL_RADIUS = 150;
