@@ -7,6 +7,7 @@
  */
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ class Ball {
     private double velocityX;
     private double velocityY;
     private double radius;
-    public Image image;
+    private ImageView ballImage;
 
     public Ball(double x, double y, double velocityX, double velocityY, double radius) {
         this.x = x;
@@ -32,7 +33,14 @@ class Ball {
         this.velocityX = velocityX;
         this.velocityY = velocityY;
         this.radius = radius;
-        image = new Image("Table_tennis_ball.png");
+        Image image = new Image("Table_tennis_ball.png");
+        ballImage = new ImageView(image);
+        ballImage.setFitWidth(2 * radius);
+        ballImage.setFitHeight(2 * radius);
+
+        // Set the initial position of the ImageView
+        ballImage.setLayoutX(x - radius);
+        ballImage.setLayoutY(y - radius);
     }
     public List<Ball> split() {
         List<Ball> balls = new ArrayList<>();
@@ -77,6 +85,10 @@ class Ball {
 
     public double getRadius() {
         return radius;
+    }
+
+    public ImageView getBallImage() {
+        return ballImage;
     }
 }
 

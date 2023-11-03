@@ -2,23 +2,27 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
+    private Pane pane;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final double BALL_RADIUS = 150;
     private static final double GRAVITY = 0.5;
     private static final double FRICTION = 0.99;
-    private static final int NUM_BALLS = 1;
-    private static final int GRID_SIZE = 10;
+    private static final int NUM_BALLS = 2;
+    private static final int GRID_SIZE = 5;
     private static final int MAX_VELOCITY = 20;
 
     private List<Ball> balls = new ArrayList<>();
@@ -36,17 +40,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Canvas canvas = new Canvas(WIDTH, HEIGHT);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        pane = new Pane();
 
-        canvas.setOnMousePressed(this::handleMousePressed);
-        canvas.setOnMouseReleased(this::handleMouseReleased);
-        canvas.setOnMouseDragged(this::handleMouseDragged);
-        canvas.setOnMousePressed(this::handleKeyPress);
+        pane.setOnMousePressed(this::handleMousePressed);
+        pane.setOnMouseReleased(this::handleMouseReleased);
+        pane.setOnMouseDragged(this::handleMouseDragged);
+        pane.setOnMousePressed(this::handleKeyPress);
 
-        StackPane root = new StackPane(canvas);
 
-        Scene scene = new Scene(root, WIDTH, HEIGHT, Color.BLACK);
+        Scene scene = new Scene(pane, WIDTH, HEIGHT, Color.BLACK);
         primaryStage.setTitle("Ball Gravity and Collision");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -59,7 +61,6 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 update();
-                draw(gc);
             }
         };
         animationTimer.start();
@@ -142,6 +143,7 @@ public class Main extends Application {
             int col = (int) (ball.getX() / GRID_SIZE);
             grid[row][col] = true;
         }
+        draw(pane);
     }
 
     private void clearGrid() {
@@ -251,14 +253,14 @@ public class Main extends Application {
         }
     }
 
-    private void draw(GraphicsContext gc) {
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, WIDTH, HEIGHT);
+    private void draw(Pane pane) {
+        pane.getChildren().clear(); // Clear the previous balls
 
-        gc.setFill(Color.WHITE);
         for (Ball ball : balls) {
-            gc.fillOval(ball.getX() - ball.getRadius(), ball.getY() - ball.getRadius(),
-                    2 * ball.getRadius(), 2 * ball.getRadius());
+            ImageView ballImage = ball.getBallImage();
+            ballImage.setLayoutX(ball.getX() - ball.getRadius());
+            ballImage.setLayoutY(ball.getY() - ball.getRadius());
+            pane.getChildren().add(ballImage);
         }
     }
 }
