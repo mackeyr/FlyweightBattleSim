@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,9 +14,12 @@ import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Main extends Application {
-    private Pane pane;
+    private Group pane;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final double BALL_RADIUS = 150;
@@ -40,13 +44,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        pane = new Pane();
+        pane = new Group();
 
         pane.setOnMousePressed(this::handleMousePressed);
         pane.setOnMouseReleased(this::handleMouseReleased);
         pane.setOnMouseDragged(this::handleMouseDragged);
         pane.setOnMousePressed(this::handleKeyPress);
-
 
         Scene scene = new Scene(pane, WIDTH, HEIGHT, Color.BLACK);
         primaryStage.setTitle("Ball Gravity and Collision");
@@ -57,10 +60,13 @@ public class Main extends Application {
             balls.add(new Ball(WIDTH / 2, HEIGHT / 2, 10, 10, BALL_RADIUS));
         }
 
+        ExecutorService executor = Executors.newFixedThreadPool(NUM_BALLS);
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
+                clearGrid();
+                update(executor);
+                draw();
             }
         };
         animationTimer.start();
@@ -97,16 +103,8 @@ public class Main extends Application {
 
     private void handleKeyPress(MouseEvent event) {
         if (event.getButton() == MouseButton.SECONDARY) {
-            List<Ball> removeList = new ArrayList<>();
-            List<Ball> addList = new ArrayList<>();
-            for (Ball ball : balls) {
-                addList.addAll(ball.split());
-                removeList.add(ball);
-            }
-            balls.addAll(addList);
-            balls.removeAll(removeList);
+            split();
         }
-
     }
 
     private void handleMouseDragged(MouseEvent event) {
@@ -116,34 +114,44 @@ public class Main extends Application {
         }
     }
 
-    private void update() {
-        // Clear the grid
-        clearGrid();
+    private void update(ExecutorService executor) {
+        List<Future<Void>> futures = new ArrayList<>();
 
         for (Ball ball : balls) {
-            // Apply gravity
-            ball.setVelocityY(ball.getVelocityY() + GRAVITY);
+            Future<Void> future = executor.submit(() -> {
+                // Apply gravity
+                ball.setVelocityY(ball.getVelocityY() + GRAVITY);
 
-            // Apply friction
-            ball.setVelocityX(ball.getVelocityX() * FRICTION);
-            ball.setVelocityY(ball.getVelocityY() * FRICTION);
+                // Apply friction
+                ball.setVelocityX(ball.getVelocityX() * FRICTION);
+                ball.setVelocityY(ball.getVelocityY() * FRICTION);
 
-            // Update ball position
-            ball.setX(ball.getX() + ball.getVelocityX());
-            ball.setY(ball.getY() + ball.getVelocityY());
+                // Update ball position
+                ball.setX(ball.getX() + ball.getVelocityX());
+                ball.setY(ball.getY() + ball.getVelocityY());
 
-            // Handle collisions with the sides
-            handleSideCollisions(ball);
+                // Handle collisions with the sides
+                handleSideCollisions(ball);
 
-            // Check for collisions with other balls using the grid
-            handleBallCollisions(ball);
+                // Check for collisions with other balls using the grid
+                handleBallCollisions(ball);
 
-            // Update the grid with the ball's position
-            int row = (int) (ball.getY() / GRID_SIZE);
-            int col = (int) (ball.getX() / GRID_SIZE);
-            grid[row][col] = true;
+                // Update the grid with the ball's position
+                int row = (int) (ball.getY() / GRID_SIZE);
+                int col = (int) (ball.getX() / GRID_SIZE);
+                grid[row][col] = true;
+                return null;
+            });
+
+            futures.add(future);
         }
-        draw(pane);
+        for (Future<Void> future : futures) {
+            try {
+                future.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void clearGrid() {
@@ -253,7 +261,7 @@ public class Main extends Application {
         }
     }
 
-    private void draw(Pane pane) {
+    private void draw() {
         pane.getChildren().clear(); // Clear the previous balls
 
         for (Ball ball : balls) {
@@ -262,5 +270,38 @@ public class Main extends Application {
             ballImage.setLayoutY(ball.getY() - ball.getRadius());
             pane.getChildren().add(ballImage);
         }
+    }
+    private void split() {
+        ExecutorService executor = Executors.newFixedThreadPool(balls.size());
+        List<Future<List<Ball>>> splitFutures = new ArrayList();
+
+        for (Ball ball : balls) {
+            Future<List<Ball>> future = executor.submit(() -> ball.split());
+            splitFutures.add(future);
+        }
+
+        List<Ball> newBalls = new ArrayList();
+        List<Ball> oldBallsToRemove = new ArrayList();
+
+        for (int i = 0; i < splitFutures.size(); i++) {
+            Future<List<Ball>> future = splitFutures.get(i);
+            Ball originalBall = balls.get(i);
+
+            try {
+                List<Ball> splitResult = future.get();
+                if (splitResult != null && !splitResult.isEmpty()) {
+                    newBalls.addAll(splitResult);
+                    oldBallsToRemove.add(originalBall);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Remove the old balls
+        balls.removeAll(oldBallsToRemove);
+
+        // Add the new balls
+        balls.addAll(newBalls);
     }
 }
