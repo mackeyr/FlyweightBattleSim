@@ -57,7 +57,8 @@ public class Main extends Application {
         pane.setOnMouseReleased(this::handleMouseReleased);
         pane.setOnMouseDragged(this::handleMouseDragged);
         pane.setOnMousePressed(this::handleKeyPress);
-        memory = new Label("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
+        memory = new Label("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+                + " Generation: " + generation);
         memory.setTextFill(Color.WHITE);
         memory.setFont(new Font("Arial", 24));
 
@@ -165,7 +166,8 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }
-        memory.setText("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
+        memory.setText("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+                + " Generation: " + generation);
     }
 
     private void clearGrid() {
