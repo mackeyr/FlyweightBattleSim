@@ -1,16 +1,12 @@
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
@@ -20,7 +16,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Main extends Application {
-    private Group pane;
+    private Group BallView;
+    private Pane pane;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final double BALL_RADIUS = 150;
@@ -46,13 +43,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        pane = new Group();
+        BallView = new Group();
+        pane = new Pane();
 
         pane.setOnMousePressed(this::handleMousePressed);
         pane.setOnMouseReleased(this::handleMouseReleased);
         pane.setOnMouseDragged(this::handleMouseDragged);
         pane.setOnMousePressed(this::handleKeyPress);
 
+        pane.getChildren().add(BallView);
         Scene scene = new Scene(pane, WIDTH, HEIGHT, Color.BLACK);
         primaryStage.setTitle("Ball Gravity and Collision");
         primaryStage.setScene(scene);
@@ -264,7 +263,7 @@ public class Main extends Application {
     }
 
     private void draw() {
-        pane.getChildren().clear(); // Clear the previous balls
+        BallView.getChildren().clear(); // Clear the previous balls
 
         for (Ball ball : balls) {
             ImageView ballImage = new ImageView(ball.getType().getBallImage());
@@ -272,7 +271,7 @@ public class Main extends Application {
             ballImage.setFitHeight(2 * ball.getType().getRadius());
             ballImage.setLayoutX(ball.getX() - ball.getType().getRadius());
             ballImage.setLayoutY(ball.getY() - ball.getType().getRadius());
-            pane.getChildren().add(ballImage);
+            BallView.getChildren().add(ballImage);
         }
     }
     private Ball createBall(double x, double y, double velocityX, double velocityY, String name, Image image, double radius){
