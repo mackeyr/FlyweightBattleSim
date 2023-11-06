@@ -22,6 +22,7 @@ import java.util.concurrent.Future;
 
 public class Main extends Application {
     private Group BallView;
+    private int generation;
     private Pane pane;
     private Label memory;
     private static final int WIDTH = 800;
@@ -55,7 +56,8 @@ public class Main extends Application {
         pane.setOnMouseReleased(this::handleMouseReleased);
         pane.setOnMouseDragged(this::handleMouseDragged);
         pane.setOnMousePressed(this::handleKeyPress);
-        memory = new Label(String.valueOf(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
+        memory = new Label("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+                + " Generation: " + generation);
         memory.setTextFill(Color.WHITE);
         memory.setFont(new Font("Arial", 24));
         pane.getChildren().add(memory);
@@ -164,7 +166,8 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }
-        memory.setText("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
+        memory.setText("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+                + " Generation: " + generation);
     }
 
     private void clearGrid() {
@@ -284,6 +287,7 @@ public class Main extends Application {
         }
     }
     private void split() {
+        generation++;
         ExecutorService executor = Executors.newFixedThreadPool(balls.size());
         List<Future<List<Ball>>> splitFutures = new ArrayList();
 
