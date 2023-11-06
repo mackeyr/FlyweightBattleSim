@@ -1,12 +1,18 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
@@ -18,6 +24,7 @@ import java.util.concurrent.Future;
 public class Main extends Application {
     private Group BallView;
     private Pane pane;
+    private Label memory;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final double BALL_RADIUS = 150;
@@ -50,9 +57,14 @@ public class Main extends Application {
         pane.setOnMouseReleased(this::handleMouseReleased);
         pane.setOnMouseDragged(this::handleMouseDragged);
         pane.setOnMousePressed(this::handleKeyPress);
+        memory = new Label("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
+        memory.setTextFill(Color.WHITE);
+        memory.setFont(new Font("Arial", 24));
 
         pane.getChildren().add(BallView);
+        pane.getChildren().add(memory);
         Scene scene = new Scene(pane, WIDTH, HEIGHT, Color.BLACK);
+        pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         primaryStage.setTitle("Ball Gravity and Collision");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -153,6 +165,7 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }
+        memory.setText("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
     }
 
     private void clearGrid() {
