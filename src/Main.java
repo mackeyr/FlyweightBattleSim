@@ -3,13 +3,16 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import java.util.concurrent.Future;
 
 public class Main extends Application {
     private Group pane;
+    private Label memory;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final double BALL_RADIUS = 150;
@@ -50,11 +54,16 @@ public class Main extends Application {
         pane.setOnMouseReleased(this::handleMouseReleased);
         pane.setOnMouseDragged(this::handleMouseDragged);
         pane.setOnMousePressed(this::handleKeyPress);
+        memory = new Label(String.valueOf(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
+        memory.setTextFill(Color.WHITE);
+        memory.setFont(new Font("Arial", 24));
+        pane.getChildren().add(memory);
 
         Scene scene = new Scene(pane, WIDTH, HEIGHT, Color.BLACK);
         primaryStage.setTitle("Ball Gravity and Collision");
         primaryStage.setScene(scene);
         primaryStage.show();
+
 
         for (int i = 0; i < NUM_BALLS; i++) {
             balls.add(new Ball(WIDTH / 2, HEIGHT / 2, 10, 10, BALL_RADIUS));
@@ -152,6 +161,7 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }
+        memory.setText("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
     }
 
     private void clearGrid() {
@@ -263,7 +273,7 @@ public class Main extends Application {
 
     private void draw() {
         pane.getChildren().clear(); // Clear the previous balls
-
+        pane.getChildren().add(memory);
         for (Ball ball : balls) {
             ImageView ballImage = ball.getBallImage();
             ballImage.setLayoutX(ball.getX() - ball.getRadius());
