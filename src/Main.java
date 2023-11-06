@@ -1,17 +1,16 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
@@ -22,7 +21,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Main extends Application {
-    private Group pane;
+    private Group BallView;
+    private Pane pane;
     private Label memory;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
@@ -48,7 +48,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        pane = new Group();
+        BallView = new Group();
+        pane = new Pane();
 
         pane.setOnMousePressed(this::handleMousePressed);
         pane.setOnMouseReleased(this::handleMouseReleased);
@@ -58,8 +59,10 @@ public class Main extends Application {
         memory.setTextFill(Color.WHITE);
         memory.setFont(new Font("Arial", 24));
         pane.getChildren().add(memory);
+        pane.getChildren().add(BallView);
 
         Scene scene = new Scene(pane, WIDTH, HEIGHT, Color.BLACK);
+        pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         primaryStage.setTitle("Ball Gravity and Collision");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -272,13 +275,12 @@ public class Main extends Application {
     }
 
     private void draw() {
-        pane.getChildren().clear(); // Clear the previous balls
-        pane.getChildren().add(memory);
+        BallView.getChildren().clear(); // Clear the previous balls
         for (Ball ball : balls) {
             ImageView ballImage = ball.getBallImage();
             ballImage.setLayoutX(ball.getX() - ball.getRadius());
             ballImage.setLayoutY(ball.getY() - ball.getRadius());
-            pane.getChildren().add(ballImage);
+            BallView.getChildren().add(ballImage);
         }
     }
     private void split() {
