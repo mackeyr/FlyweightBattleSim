@@ -24,7 +24,7 @@ public class Main extends Application {
     private Group BallView;
     private int generation;
     private Pane pane;
-    private Label memory;
+    private Label memory = new Label();
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final double BALL_RADIUS = 150;
@@ -56,8 +56,6 @@ public class Main extends Application {
         pane.setOnMouseReleased(this::handleMouseReleased);
         pane.setOnMouseDragged(this::handleMouseDragged);
         pane.setOnMousePressed(this::handleKeyPress);
-        memory = new Label("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
-                + " Generation: " + generation);
         memory.setTextFill(Color.WHITE);
         memory.setFont(new Font("Arial", 24));
         pane.getChildren().add(memory);
@@ -166,8 +164,9 @@ public class Main extends Application {
                 e.printStackTrace();
             }
         }
-        memory.setText("Memory Usage: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
-                + " Generation: " + generation);
+        long currentMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        memory.setText("Memory Usage: " + Math.round(currentMem / Math.pow(10, Math.floor(Math.log10(currentMem)) - 2)) / 100.0
+                + "e+" + (int) Math.floor(Math.log10(currentMem)) + " Generation: " + generation);
     }
 
     private void clearGrid() {
